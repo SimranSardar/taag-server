@@ -1,6 +1,6 @@
-import { Model, Schema } from "mongoose";
+import mongoose from "mongoose";
 
-const CampaignSchema = new Schema(
+const CampaignSchema = mongoose.Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
@@ -9,20 +9,22 @@ const CampaignSchema = new Schema(
       sector: { type: String, required: true }, // Beauty | Fashion | Health
       website: { type: String, required: true }, // URL
       poc: {
-        name: { type: String, required: true },
+        id: { type: String, required: true },
         position: { type: String, required: true },
         email: { type: String, required: true },
         contact: { type: String, required: true }, // +91xxxxxxxxxx
+        _id: false,
       },
     },
     platform: { type: String, required: true }, // youtube | instagram
     sector: { type: String, required: true }, // Beauty | Fashion | Health | Lifestyle
     deliverable: { type: String, required: true }, // video | image
     brief: { type: String, required: true },
-    validity: {
-      from: { type: String, required: true }, //  ISOString
-      to: { type: String, required: true }, //  ISOString
-    },
+    // validity: {
+    //   from: { type: String, required: true }, //  ISOString
+    //   to: { type: String, required: true }, //  ISOString
+    // },
+    selectedInfluencers: { type: Array, required: true },
     brandAmount: { type: Number, required: true },
     currency: { type: String, required: true }, // INR | USD
     agencyFee: { type: Number, required: true },
@@ -38,4 +40,6 @@ const CampaignSchema = new Schema(
   }
 );
 
-export const CampaignModel = new Model(CampaignSchema);
+const CampaignModel = mongoose.model("campaignModel", CampaignSchema);
+
+export default CampaignModel;

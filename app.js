@@ -1,34 +1,34 @@
 import express from "express";
 import cors from "cors";
 import instagramRoutes from "./routes/instagram.js";
+import campaignRoutes from "./routes/campaign.js";
+import youtubeRoutes from "./routes/youtube.js";
+import authRoutes from "./routes/auth.js";
 import Insta from "scraper-instagram";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 
-// app.use("/instagram", instagramRoutes);
+app.use("/auth", authRoutes);
+app.use("/campaigns", campaignRoutes);
+app.use("/instagram", instagramRoutes);
+app.use("/youtube", youtubeRoutes);
 
 app.get("/", (req, res) => {
-  return res.json({ status: "working" });
+  return res.json({ status: "Taag Server" });
 });
 
-app.get("/instagram", (req, res) => {
-  const shortcode = "CfguyK5DH3l";
+const DB_NAME = "TAAG";
 
-  const InstaClient = new Insta();
-  InstaClient.getPost(shortcode)
-    .then((post) => {
-      return res.status(200).json(post);
-    })
-    .catch((err) => console.error(err));
+const DATABASE_URL = process.env.DB_URI;
 
-  //   res.status(200).json({
-  //     status: "Success",
-  //   });
-});
+mongoose.connect(`${DATABASE_URL}/${DB_NAME}`);
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
