@@ -1,4 +1,5 @@
 import ArtistModel from "../models/Artist.model.js";
+import xlsx from "xlsx";
 import { v4 as uuid } from "uuid";
 
 export async function createArtist(req, res) {
@@ -95,6 +96,38 @@ export async function deleteArtist(req, res) {
       data: artist,
     });
   } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+export async function uploadArtistExcel(req, res) {
+  try {
+    console.log(req.file);
+    const workBook = xlsx.readFile(req.file.path);
+
+    const workSheet = workBook.Sheets["Sheet1"];
+
+    const data = xlsx.utils.sheet_to_json(workSheet);
+    console.log(data);
+
+    let finalData = data.map((item) => ({
+      ...item,
+      _id: `${uuid().replace(/-/g, "_")}`,
+      languages: item.languages.split(",").map((item) => item.trim()),
+      categories: item.categories.split(",").map((item) => item.trim()),
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }));
+    const artists = await ArtistModel.insertMany(finalData);
+    return res.status(200).json({
+      status: "success",
+      data: artists,
+    });
+  } catch (error) {
+    console.log(error);
     return res.status(500).json({
       status: "error",
       message: error.message,

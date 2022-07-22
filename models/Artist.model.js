@@ -10,9 +10,9 @@ const ArtistSchema = mongoose.Schema(
     type: { type: String, required: true }, // macro | mini | mega
     gender: { type: String, required: true },
     location: { type: String, required: true },
-    agenycName: { type: String, required: true },
+    agencyName: { type: String, required: true },
     manager: { type: String, required: true },
-    contact: { type: String, required: true },
+    contact: { type: Number, required: true },
     email: { type: String, required: true },
     createdAt: { type: String, required: true }, // ISOString
     updatedAt: { type: String, required: true }, // ISOString
