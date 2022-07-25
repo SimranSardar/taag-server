@@ -71,10 +71,14 @@ export async function updateCampaign(req, res) {
   }
 
   try {
-    const res = await CampaignModel.findByIdAndUpdate(req.params.id, req.body);
+    console.log(req.body);
+    const campaignUpdate = await CampaignModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
     return res.status(200).json({
       status: "success",
-      data: res,
+      data: campaignUpdate,
     });
   } catch (error) {
     return res.status(500).json({

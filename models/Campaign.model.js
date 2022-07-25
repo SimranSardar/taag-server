@@ -24,7 +24,7 @@ const CampaignSchema = mongoose.Schema(
     //   from: { type: String, required: true }, //  ISOString
     //   to: { type: String, required: true }, //  ISOString
     // },
-    selectedInfluencers: { type: Array, required: true },
+    selectedArtists: { type: Array, required: true },
     brandAmount: { type: Number, required: true },
     currency: { type: String, required: true }, // INR | USD
     agencyFee: { type: Number, required: true },
