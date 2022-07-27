@@ -1,4 +1,5 @@
 import CampaignModel from "../models/Campaign.model.js";
+import ArtistModel from "../models/Artist.model.js";
 import { v4 as uuid } from "uuid";
 
 export async function createCampaign(req, res) {
@@ -36,6 +37,27 @@ export async function getCampaign(req, res) {
 
   try {
     const campaign = await CampaignModel.findById(req.query.id);
+    if (campaign.selectedArtists.length) {
+      const artists = await ArtistModel.find({
+        _id: {
+          $in: campaign.selectedArtists.map((item) => {
+            return item._id;
+          }),
+        },
+      });
+      const temp = artists.map((item) => {
+        return item.toObject();
+      });
+      campaign.selectedArtists = campaign.selectedArtists.map((item) => {
+        return {
+          ...item,
+          ...temp.find((t) => {
+            return t._id === item._id;
+          }),
+        };
+      });
+      return res.json(campaign);
+    }
     return res.status(200).json(campaign);
   } catch (error) {
     return res.status(500).json({
