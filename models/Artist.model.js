@@ -11,6 +11,7 @@ const ArtistSchema = mongoose.Schema(
     gender: { type: String, required: true },
     location: { type: String, required: true },
     agencyName: { type: String, required: true },
+    averageViews: { type: Number, required: true },
     manager: { type: String, required: true },
     contact: { type: Number, required: true },
     email: { type: String, required: true },

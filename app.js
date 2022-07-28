@@ -8,6 +8,7 @@ import artistRoutes from "./routes/artist.routes.js";
 import Insta from "scraper-instagram";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { ServerApiVersion } from "mongodb";
 
 const app = express();
 app.use(cors());
@@ -30,7 +31,11 @@ const DB_NAME = "TAAG";
 
 const DATABASE_URL = process.env.DB_URI;
 
-mongoose.connect(`${DATABASE_URL}/${DB_NAME}`);
+mongoose.connect(`${DATABASE_URL}`, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  serverApi: ServerApiVersion.v1,
+});
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console

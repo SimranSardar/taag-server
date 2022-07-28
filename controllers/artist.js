@@ -48,7 +48,6 @@ export async function getArtist(req, res) {
 
 export async function getArtists(req, res) {
   try {
-    const status = req.query.status;
     const artists = await ArtistModel.find().limit(10);
     return res.status(200).json(artists);
   } catch (error) {
