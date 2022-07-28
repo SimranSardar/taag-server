@@ -1,6 +1,6 @@
-import express from "express";
-import mongoose from "mongoose";
-import StudentModel from "../models/Student.model.js";
+import bcrypt from "bcrypt";
+import { v4 as uuid } from "uuid";
+import UserModel from "../models/User.model.js";
 
 export const createUser = async (req, res) => {
   const { email, password } = req.body;
@@ -16,6 +16,8 @@ export const createUser = async (req, res) => {
 
     let finalData = req.body;
     finalData.userType = "admin";
+    finalData.createdAt = new Date().toISOString();
+    finalData.updatedAt = new Date().toISOString();
 
     console.log(finalData, "fd");
     const result = await UserModel.create({
