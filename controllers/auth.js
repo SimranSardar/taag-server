@@ -12,21 +12,21 @@ export const userLogin = async function (req, res, next) {
     });
   }
 
-  if (email === "admin@email.com" && password === "password") {
-    const token = jwt.sign(
-      {
-        email,
-        id: "ABC123",
-      },
-      process.env.AUTH_KEY,
-      { expiresIn: "7d" }
-    );
+  // if (email === "admin@email.com" && password === "password") {
+  //   const token = jwt.sign(
+  //     {
+  //       email,
+  //       id: "ABC123",
+  //     },
+  //     process.env.AUTH_KEY,
+  //     { expiresIn: "7d" }
+  //   );
 
-    return res.status(200).json({
-      status: "success",
-      token,
-    });
-  }
+  //   return res.status(200).json({
+  //     status: "success",
+  //     token,
+  //   });
+  // }
 
   try {
     const user = await mongoose.connection.db

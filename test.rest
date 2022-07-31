@@ -1,1 +1,10 @@
 GET http://localhost:5000/instagram?shortCode=CfguyK5DH3l
+
+###
+
+GET http://localhost:5000/youtube/getLikes
+Content-Type: application/json
+
+{
+    "videoId": "dkdXCbwWKHY"
+}

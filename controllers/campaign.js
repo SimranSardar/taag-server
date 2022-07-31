@@ -38,28 +38,20 @@ export async function getCampaign(req, res) {
   try {
     const campaign = await CampaignModel.findById(req.query.id);
     if (campaign.selectedArtists.length) {
-      const artists = await ArtistModel.find({
-        _id: {
-          $in: campaign.selectedArtists.map((item) => {
-            return item._id;
-          }),
-        },
-      });
-      const temp = artists.map((item) => {
-        return item.toObject();
-      });
-      campaign.selectedArtists = campaign.selectedArtists.map((item) => {
-        return {
-          ...item,
-          ...temp.find((t) => {
-            return t._id === item._id;
-          }),
-        };
-      });
-      return res.json(campaign);
+      const artists = await ArtistModel.find(
+        { _id: { $in: campaign.selectedArtists.map((item) => item._id) } },
+        { createdAt: 0, updatedAt: 0 }
+      );
+      let artistsObj = artists.map((artist) => artist.toObject());
+      campaign.selectedArtists = campaign.selectedArtists.map((artist) => ({
+        ...artist,
+        ...artistsObj.find((item) => item._id === artist._id),
+      }));
+      console.log(campaign.selectedArtists);
     }
     return res.status(200).json(campaign);
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       status: "error",
       message: error.message,
@@ -123,6 +115,32 @@ export async function deleteCampaign(req, res) {
     return res.status(200).json({
       status: "success",
       data: res,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+export async function uploadInvoice(req, res) {
+  console.log(req.file);
+  console.log(req.body);
+  if (!req.file?.id) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid ID",
+    });
+  }
+
+  try {
+    const campaign = await CampaignModel.findById(req.params.id);
+    campaign.invoice = req.file.filename;
+    await campaign.save();
+    return res.status(200).json({
+      status: "success",
+      data: campaign,
     });
   } catch (error) {
     return res.status(500).json({

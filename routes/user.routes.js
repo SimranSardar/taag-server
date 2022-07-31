@@ -1,8 +1,8 @@
 import express from "express";
-import { getStats } from "../controllers/youtube.js";
+import { createUser } from "../controllers/user.js";
 
 const router = express.Router();
 
-router.get("/getLikes", getStats);
+router.post("/create", createUser);
 
 export default router;
