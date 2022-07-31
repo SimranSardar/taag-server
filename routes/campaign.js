@@ -3,6 +3,7 @@ import {
   createCampaign,
   getCampaign,
   getCampaigns,
+  getCampaignWithQuery,
   updateCampaign,
   uploadInvoice,
 } from "../controllers/campaign.js";
@@ -22,8 +23,9 @@ const router = express.Router();
 
 router.get("/all", getCampaigns);
 router.get("/single/", getCampaign);
+router.get("/single/query", getCampaignWithQuery);
 router.post("/create", createCampaign);
-router.patch("/update/:id", updateCampaign);
+router.patch("/update/", updateCampaign);
 router.post("/upload", upload.single("file"), uploadInvoice);
 
 export default router;
