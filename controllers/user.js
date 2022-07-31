@@ -22,7 +22,7 @@ export const createUser = async (req, res) => {
     console.log(finalData, "fd");
     const result = await UserModel.create({
       ...finalData,
-      _id: `IITP_ST_${uuid().replace(/-/g, "_")}`,
+      _id: `_${uuid().replace(/-/g, "_")}`,
       password: hashedPassword,
     });
 

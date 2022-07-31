@@ -8,6 +8,7 @@ const ArtistSchema = mongoose.Schema(
     categories: { type: Array, required: true }, // Beauty | Fashion | Health | Lifestyle
     languages: { type: Array, required: true }, // English | Hindi | Marathi | Telugu | Urdu
     type: { type: String, required: true }, // macro | mini | mega
+    link: { type: String, required: true }, // youtube | instagram
     gender: { type: String, required: true },
     location: { type: String, required: true },
     agencyName: { type: String, required: true },
