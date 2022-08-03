@@ -1,5 +1,19 @@
 import mongoose from "mongoose";
 
+const yt = {
+  subscribers: { type: Number, required: true },
+  link: { type: String, required: true },
+  commercial: { type: Number, required: true },
+  averageViews: { type: Number, required: true },
+};
+
+const ig = {
+  followers: { type: Number, required: true },
+  link: { type: String, required: true },
+  reelCommercial: { type: Number, required: true },
+  storyCommercial: { type: Number, required: true },
+  averageViews: { type: Number, required: true },
+};
 const ArtistSchema = mongoose.Schema(
   {
     _id: { type: String, required: true },
@@ -9,6 +23,8 @@ const ArtistSchema = mongoose.Schema(
     languages: { type: Array, required: true }, // English | Hindi | Marathi | Telugu | Urdu
     type: { type: String, required: true }, // macro | mini | mega
     link: { type: String, required: true }, // youtube | instagram
+    youtube: { type: yt, default: undefined },
+    instagram: { type: ig, default: undefined },
     gender: { type: String, required: true },
     location: { type: String, required: true },
     agencyName: { type: String, required: true },

@@ -6,12 +6,13 @@ import {
   getCampaignWithQuery,
   updateCampaign,
   uploadInvoice,
+  downloadInvoice,
 } from "../controllers/campaign.js";
 import multer from "multer";
 
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "./uploads/invoices");
+    cb(null, "./uploads");
   },
   filename: (req, file, cb) => {
     cb(console.log(file.originalname), file.originalname);
@@ -27,5 +28,6 @@ router.get("/single/query", getCampaignWithQuery);
 router.post("/create", createCampaign);
 router.patch("/update/", updateCampaign);
 router.post("/upload", upload.single("file"), uploadInvoice);
+router.get("/download-invoice", downloadInvoice);
 
 export default router;

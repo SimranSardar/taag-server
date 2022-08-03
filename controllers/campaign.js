@@ -1,6 +1,10 @@
 import CampaignModel from "../models/Campaign.model.js";
 import ArtistModel from "../models/Artist.model.js";
 import { v4 as uuid } from "uuid";
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function createCampaign(req, res) {
   try {
@@ -190,7 +194,7 @@ export async function deleteCampaign(req, res) {
 export async function uploadInvoice(req, res) {
   console.log(req.file);
   console.log(req.body);
-  if (!req.file?.id) {
+  if (!req.body?.id) {
     return res.status(400).json({
       status: "error",
       message: "Invalid ID",
@@ -198,8 +202,14 @@ export async function uploadInvoice(req, res) {
   }
 
   try {
-    const campaign = await CampaignModel.findById(req.params.id);
-    campaign.invoice = req.file.filename;
+    const campaign = await CampaignModel.findById(req.body.id);
+    const idx = campaign.selectedArtists.findIndex(
+      (item) => item._id === req.body.artistId
+    );
+    campaign.selectedArtists[idx] = {
+      ...campaign.selectedArtists[idx],
+      invoice: req.file.filename,
+    };
     await campaign.save();
     return res.status(200).json({
       status: "success",
@@ -211,4 +221,22 @@ export async function uploadInvoice(req, res) {
       message: error.message,
     });
   }
+}
+
+export async function downloadInvoice(req, res) {
+  if (!req.query.id) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid ID",
+    });
+  }
+
+  const campaign = await CampaignModel.findById(req.query.id);
+  console.log(campaign, req.query.id, req.query.artistId);
+  const artist = campaign.selectedArtists.find(
+    (item) => item._id === req.query.artistId
+  );
+  console.log(artist);
+  const file = `${__dirname}/../uploads/${artist.invoice}`;
+  return res.download(file);
 }

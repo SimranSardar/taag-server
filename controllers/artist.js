@@ -115,6 +115,12 @@ export async function uploadArtistExcel(req, res) {
     let finalData = data.map((item) => ({
       ...item,
       _id: `${uuid().replace(/-/g, "_")}`,
+      instagram: item.instagram
+        ? {
+            ...item.instagram,
+            followers: item.instagram.followers ?? 10000,
+          }
+        : undefined,
       languages: item.languages.split(",").map((item) => item.trim()),
       categories: item.categories.split(",").map((item) => item.trim()),
       createdAt: new Date().toISOString(),
