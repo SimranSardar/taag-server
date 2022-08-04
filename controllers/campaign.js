@@ -155,7 +155,8 @@ export async function updateCampaign(req, res) {
     console.log(req.body);
     const campaignUpdate = await CampaignModel.findByIdAndUpdate(
       req.body._id,
-      req.body
+      req.body,
+      { new: true }
     );
     return res.status(200).json({
       status: "success",
