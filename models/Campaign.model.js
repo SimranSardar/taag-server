@@ -32,6 +32,7 @@ const CampaignSchema = mongoose.Schema(
     totalAverageViews: { type: Number, required: true },
     status: { type: String, required: true }, // draft | locked | finished
     sharedWith: { type: Array, required: false },
+    extras: { type: Array, required: false },
     createdAt: { type: String, required: true }, // ISOString
     updatedAt: { type: String, required: true }, // ISOString
   },
