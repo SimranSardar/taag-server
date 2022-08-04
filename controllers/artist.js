@@ -121,7 +121,71 @@ export async function uploadArtistExcel(req, res) {
             followers: item.instagram.followers ?? 10000,
           }
         : undefined,
-      languages: item.languages.split(",").map((item) => item.trim()),
+      languages: item.languages?.split(",").map((item) => item.trim()) || [
+        "english",
+      ],
+      location: item.location || "Mumbai",
+      type: item.type || "type",
+      instagram: item.instagram
+        ? {
+            link: item.instagram,
+            followers: item.followers
+              ? parseInt(
+                  item.followers.toString().replace(",", "").replace(" ", "")
+                ) || 1
+              : 0 || 1,
+            reelCommercial: item.reelCommercial
+              ? parseInt(
+                  item.reelCommercial
+                    .toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 || 1,
+            storyCommercial: item.storyCommercial
+              ? parseInt(
+                  item.storyCommercial
+                    .toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 || 1,
+            averageViews: item.averageInstagramViews
+              ? parseInt(
+                  item.averageInstagramViews
+                    .toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 || 1,
+          }
+        : undefined,
+      youtube: item.youtube
+        ? {
+            link: item.youtube,
+            subscribers: item.subscribers
+              ? parseInt(
+                  item.subscribers.toString().replace(",", "").replace(" ", "")
+                ) || 1
+              : 0 ?? 1,
+            commercial: item.commercial
+              ? parseInt(
+                  item.commercial.toString().replace(",", "").replace(" ", "")
+                ) || 1
+              : 0 ?? 1,
+            averageViews: item.averageYouTubeViews
+              ? parseInt(
+                  item.averageYouTubeViews
+                    .toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 ?? 1,
+          }
+        : undefined,
+      agencyName: item.agencyName || "NA",
+      manager: item.manager || "NA",
+      contact: parseInt(item.contact) || 0,
       categories: item.categories.split(",").map((item) => item.trim()),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
