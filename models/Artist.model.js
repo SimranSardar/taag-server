@@ -31,6 +31,7 @@ const ArtistSchema = mongoose.Schema(
     email: { type: String, required: true },
     createdAt: { type: String, required: true }, // ISOString
     updatedAt: { type: String, required: true }, // ISOString
+    uploadedBy: { type: String, required: true }, // agencyId
   },
   {
     collection: "artists",

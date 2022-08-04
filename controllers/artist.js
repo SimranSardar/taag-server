@@ -107,7 +107,7 @@ export async function uploadArtistExcel(req, res) {
     console.log(req.file);
     const workBook = xlsx.readFile(req.file.path);
 
-    const workSheet = workBook.Sheets["Sheet1"];
+    const workSheet = workBook.Sheets[Object.keys(workBook.Sheets)[0]];
 
     const data = xlsx.utils.sheet_to_json(workSheet);
     console.log(data);
@@ -168,9 +168,12 @@ export async function uploadArtistExcel(req, res) {
                   item.subscribers.toString().replace(",", "").replace(" ", "")
                 ) || 1
               : 0 ?? 1,
-            commercial: item.commercial
+            commercial: item.yotubeCommercial
               ? parseInt(
-                  item.commercial.toString().replace(",", "").replace(" ", "")
+                  item.yotubeCommercial
+                    .toString()
+                    .replace(",", "")
+                    .replace(" ", "")
                 ) || 1
               : 0 ?? 1,
             averageViews: item.averageYouTubeViews
