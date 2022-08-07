@@ -2,15 +2,16 @@ import jwt, { decode } from "jsonwebtoken";
 
 const auth = async (req, res, next) => {
   try {
-    const token = req.headers.AccessKey;
+    console.log(req.headers);
+    const token = req.headers.accesskey;
     const isCustomAuth = token.length < 500; // token > 500 = Google Oauth OR token < 500 = local Auth
 
     let decodedData;
 
-    if (token && isCustomAuth) {
-      decodedData = jwt.verify(token, "test");
+    if (token) {
+      decodedData = jwt.verify(token, process.env.AUTH_KEY);
 
-      req.userId = decodeData.id;
+      req.user = decodedData;
     }
     next();
   } catch (error) {

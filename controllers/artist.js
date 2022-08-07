@@ -104,7 +104,7 @@ export async function deleteArtist(req, res) {
 
 export async function uploadArtistExcel(req, res) {
   try {
-    console.log(req.file);
+    console.log(req.file, req.user);
     const workBook = xlsx.readFile(req.file.path);
 
     const workSheet = workBook.Sheets[Object.keys(workBook.Sheets)[0]];
@@ -118,7 +118,7 @@ export async function uploadArtistExcel(req, res) {
       instagram: item.instagram
         ? {
             ...item.instagram,
-            followers: item.instagram.followers ?? 10000,
+            followers: item.instagram?.followers ?? 10000,
           }
         : undefined,
       languages: item.languages?.split(",").map((item) => item.trim()) || [
@@ -131,13 +131,13 @@ export async function uploadArtistExcel(req, res) {
             link: item.instagram,
             followers: item.followers
               ? parseInt(
-                  item.followers.toString().replace(",", "").replace(" ", "")
+                  item.followers?.toString().replace(",", "").replace(" ", "")
                 ) || 1
               : 0 || 1,
             reelCommercial: item.reelCommercial
               ? parseInt(
                   item.reelCommercial
-                    .toString()
+                    ?.toString()
                     .replace(",", "")
                     .replace(" ", "")
                 ) || 1
@@ -145,7 +145,7 @@ export async function uploadArtistExcel(req, res) {
             storyCommercial: item.storyCommercial
               ? parseInt(
                   item.storyCommercial
-                    .toString()
+                    ?.toString()
                     .replace(",", "")
                     .replace(" ", "")
                 ) || 1
@@ -153,7 +153,7 @@ export async function uploadArtistExcel(req, res) {
             averageViews: item.averageInstagramViews
               ? parseInt(
                   item.averageInstagramViews
-                    .toString()
+                    ?.toString()
                     .replace(",", "")
                     .replace(" ", "")
                 ) || 1
@@ -165,21 +165,21 @@ export async function uploadArtistExcel(req, res) {
             link: item.youtube,
             subscribers: item.subscribers
               ? parseInt(
-                  item.subscribers.toString().replace(",", "").replace(" ", "")
+                  item.subscribers?.toString().replace(",", "").replace(" ", "")
                 ) || 1
               : 0 ?? 1,
             commercial: item.yotubeCommercial
               ? parseInt(
                   item.yotubeCommercial
-                    .toString()
+                    ?.toString()
                     .replace(",", "")
                     .replace(" ", "")
                 ) || 1
               : 0 ?? 1,
-            averageViews: item.averageYouTubeViews
+            averageViews: item.averageYoutubeViews
               ? parseInt(
-                  item.averageYouTubeViews
-                    .toString()
+                  item.averageYoutubeViews
+                    ?.toString()
                     .replace(",", "")
                     .replace(" ", "")
                 ) || 1
@@ -192,6 +192,7 @@ export async function uploadArtistExcel(req, res) {
       categories: item.categories.split(",").map((item) => item.trim()),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      uploadedBy: { id: req.user.id, userType: req.user.userType },
     }));
     const artists = await ArtistModel.insertMany(finalData);
     return res.status(200).json({

@@ -52,6 +52,7 @@ export const userLogin = async function (req, res, next) {
       {
         email,
         id: user._id,
+        userType: user.userType,
       },
       process.env.AUTH_KEY,
       { expiresIn: "7d" }

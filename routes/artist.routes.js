@@ -8,6 +8,7 @@ import {
   uploadArtistExcel,
 } from "../controllers/artist.js";
 import multer from "multer";
+import auth from "../middlewares/auth.js";
 
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -24,7 +25,7 @@ const router = express.Router();
 router.get("/all", getArtists);
 router.get("/:id", getArtist);
 router.post("/create", createArtist);
-router.post("/bulk", upload.single("file"), uploadArtistExcel);
+router.post("/bulk", auth, upload.single("file"), uploadArtistExcel);
 router.patch("/:id", updateArtist);
 router.delete("/:id", deleteArtist);
 
