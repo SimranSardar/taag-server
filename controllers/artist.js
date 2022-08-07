@@ -48,7 +48,7 @@ export async function getArtist(req, res) {
 
 export async function getArtists(req, res) {
   try {
-    const artists = await ArtistModel.find().limit(10);
+    const artists = await ArtistModel.find();
     return res.status(200).json(artists);
   } catch (error) {
     return res.status(500).json({
@@ -168,9 +168,9 @@ export async function uploadArtistExcel(req, res) {
                   item.subscribers?.toString().replace(",", "").replace(" ", "")
                 ) || 1
               : 0 ?? 1,
-            commercial: item.yotubeCommercial
+            commercial: item.youtubeCommercial
               ? parseInt(
-                  item.yotubeCommercial
+                  item.youtubeCommercial
                     ?.toString()
                     .replace(",", "")
                     .replace(" ", "")

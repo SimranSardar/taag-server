@@ -31,7 +31,7 @@ export async function createCampaign(req, res) {
 }
 
 export async function getCampaign(req, res) {
-  console.log(req.query);
+  // console.log(req.query);
   if (!req.query.id) {
     return res.status(400).json({
       status: "error",
@@ -48,11 +48,13 @@ export async function getCampaign(req, res) {
       );
       let artistsObj = artists.map((artist) => artist.toObject());
       campaign.selectedArtists = campaign.selectedArtists.map((artist) => ({
-        ...artist,
         ...artistsObj.find((item) => item._id === artist._id),
+        ...artist,
+        totalAverageViews: artist.totalAverageViews || 0,
+        invoice: artist.invoice,
       }));
-      console.log(campaign.selectedArtists);
     }
+    console.log("Uassssss", campaign.selectedArtists[0]);
     return res.status(200).json(campaign);
   } catch (error) {
     console.log(error);
@@ -193,8 +195,8 @@ export async function deleteCampaign(req, res) {
 }
 
 export async function uploadInvoice(req, res) {
-  console.log(req.file);
-  console.log(req.body);
+  // console.log(req.file);
+  // console.log(req.body);
   if (!req.body?.id) {
     return res.status(400).json({
       status: "error",
@@ -211,6 +213,7 @@ export async function uploadInvoice(req, res) {
       ...campaign.selectedArtists[idx],
       invoice: req.file.filename,
     };
+    console.log(campaign);
     await campaign.save();
     return res.status(200).json({
       status: "success",
