@@ -26,7 +26,7 @@ router.get("/all", getArtists);
 router.get("/:id", getArtist);
 router.post("/create", createArtist);
 router.post("/bulk", auth, upload.single("file"), uploadArtistExcel);
-router.patch("/:id", updateArtist);
+router.patch("/update", updateArtist);
 router.delete("/:id", deleteArtist);
 
 export default router;

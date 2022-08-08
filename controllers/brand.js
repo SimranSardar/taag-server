@@ -3,7 +3,7 @@ import { v4 as uuid } from "uuid";
 
 export async function createBrand(req, res) {
   try {
-    // console.log(req, res);
+    console.log(req.body);
     const Brand = await BrandModel.create({
       ...req.body,
       _id: `${req.body.name.toUpperCase().replace(/ /g, "_")}_${uuid().replace(

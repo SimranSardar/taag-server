@@ -59,7 +59,7 @@ export async function getArtists(req, res) {
 }
 
 export async function updateArtist(req, res) {
-  if (!req.params.id) {
+  if (!req.query.id) {
     return res.status(400).json({
       status: "error",
       message: "Invalid ID",
@@ -67,7 +67,7 @@ export async function updateArtist(req, res) {
   }
 
   try {
-    const artist = await ArtistModel.findByIdAndUpdate(req.params.id, req.body);
+    const artist = await ArtistModel.findByIdAndUpdate(req.query.id, req.body);
     return res.status(200).json({
       status: "success",
       data: artist,
