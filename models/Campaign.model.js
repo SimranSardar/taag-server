@@ -4,6 +4,7 @@ const CampaignSchema = mongoose.Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
+    isSharedWithBrand: { type: Boolean, required: true },
     brand: {
       name: { type: String, required: true },
       sector: { type: String, required: true }, // Beauty | Fashion | Health
