@@ -48,7 +48,7 @@ export async function getArtist(req, res) {
 
 export async function getArtists(req, res) {
   try {
-    const artists = await ArtistModel.find().limit(10);
+    const artists = await ArtistModel.find();
     return res.status(200).json(artists);
   } catch (error) {
     return res.status(500).json({
@@ -59,7 +59,7 @@ export async function getArtists(req, res) {
 }
 
 export async function updateArtist(req, res) {
-  if (!req.params.id) {
+  if (!req.query.id) {
     return res.status(400).json({
       status: "error",
       message: "Invalid ID",
@@ -67,7 +67,7 @@ export async function updateArtist(req, res) {
   }
 
   try {
-    const artist = await ArtistModel.findByIdAndUpdate(req.params.id, req.body);
+    const artist = await ArtistModel.findByIdAndUpdate(req.query.id, req.body);
     return res.status(200).json({
       status: "success",
       data: artist,
@@ -104,10 +104,10 @@ export async function deleteArtist(req, res) {
 
 export async function uploadArtistExcel(req, res) {
   try {
-    console.log(req.file);
+    console.log(req.file, req.user);
     const workBook = xlsx.readFile(req.file.path);
 
-    const workSheet = workBook.Sheets["Sheet1"];
+    const workSheet = workBook.Sheets[Object.keys(workBook.Sheets)[0]];
 
     const data = xlsx.utils.sheet_to_json(workSheet);
     console.log(data);
@@ -115,10 +115,84 @@ export async function uploadArtistExcel(req, res) {
     let finalData = data.map((item) => ({
       ...item,
       _id: `${uuid().replace(/-/g, "_")}`,
-      languages: item.languages.split(",").map((item) => item.trim()),
+      instagram: item.instagram
+        ? {
+            ...item.instagram,
+            followers: item.instagram?.followers ?? 10000,
+          }
+        : undefined,
+      languages: item.languages?.split(",").map((item) => item.trim()) || [
+        "english",
+      ],
+      location: item.location || "Mumbai",
+      type: item.type || "type",
+      instagram: item.instagram
+        ? {
+            link: item.instagram,
+            followers: item.followers
+              ? parseInt(
+                  item.followers?.toString().replace(",", "").replace(" ", "")
+                ) || 1
+              : 0 || 1,
+            reelCommercial: item.reelCommercial
+              ? parseInt(
+                  item.reelCommercial
+                    ?.toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 || 1,
+            storyCommercial: item.storyCommercial
+              ? parseInt(
+                  item.storyCommercial
+                    ?.toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 || 1,
+            averageViews: item.averageInstagramViews
+              ? parseInt(
+                  item.averageInstagramViews
+                    ?.toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 || 1,
+          }
+        : undefined,
+      youtube: item.youtube
+        ? {
+            link: item.youtube,
+            subscribers: item.subscribers
+              ? parseInt(
+                  item.subscribers?.toString().replace(",", "").replace(" ", "")
+                ) || 1
+              : 0 ?? 1,
+            commercial: item.youtubeCommercial
+              ? parseInt(
+                  item.youtubeCommercial
+                    ?.toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 ?? 1,
+            averageViews: item.averageYoutubeViews
+              ? parseInt(
+                  item.averageYoutubeViews
+                    ?.toString()
+                    .replace(",", "")
+                    .replace(" ", "")
+                ) || 1
+              : 0 ?? 1,
+          }
+        : undefined,
+      agencyName: item.agencyName || "NA",
+      manager: item.manager || "NA",
+      contact: parseInt(item.contact) || 0,
       categories: item.categories.split(",").map((item) => item.trim()),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
+      uploadedBy: { id: req.user.id, userType: req.user.userType },
     }));
     const artists = await ArtistModel.insertMany(finalData);
     return res.status(200).json({
