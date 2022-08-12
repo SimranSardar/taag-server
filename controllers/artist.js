@@ -153,6 +153,7 @@ export async function uploadArtistExcel(req, res) {
       languages: item.languages?.split(",").map((item) => item.trim()) || [
         "english",
       ],
+      gender: item.gender || "NA",
       location: item.location || "Mumbai",
       type: item.type || "type",
       instagram: item.instagram
