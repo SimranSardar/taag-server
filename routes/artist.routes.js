@@ -6,6 +6,7 @@ import {
   updateArtist,
   deleteArtist,
   uploadArtistExcel,
+  updateArtists,
 } from "../controllers/artist.js";
 import multer from "multer";
 import auth from "../middlewares/auth.js";
@@ -27,6 +28,7 @@ router.get("/:id", getArtist);
 router.post("/create", createArtist);
 router.post("/bulk", auth, upload.single("file"), uploadArtistExcel);
 router.patch("/update", updateArtist);
+router.patch("/update/bulk", updateArtists);
 router.delete("/:id", deleteArtist);
 
 export default router;

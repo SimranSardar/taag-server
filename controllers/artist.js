@@ -80,6 +80,35 @@ export async function updateArtist(req, res) {
   }
 }
 
+export async function updateArtists(req, res) {
+  let finalArtists = [];
+  console.log(req.body);
+
+  for (let i = 0; i < req.body.length; i++) {
+    try {
+      const artist = await ArtistModel.findByIdAndUpdate(
+        req.body[i]._id,
+        req.body[i],
+        {
+          new: true,
+          upsert: true,
+        }
+      );
+      finalArtists.push(artist);
+    } catch (error) {
+      return res.status(500).json({
+        status: "error",
+        message: error.message,
+      });
+    }
+  }
+
+  return res.status(200).json({
+    status: "success",
+    data: finalArtists,
+  });
+}
+
 export async function deleteArtist(req, res) {
   if (!req.query.id) {
     return res.status(400).json({
@@ -187,9 +216,11 @@ export async function uploadArtistExcel(req, res) {
           }
         : undefined,
       agencyName: item.agencyName || "NA",
-      manager: item.manager || "NA",
+      manager: item.manager || item.agencyName || "NA",
       contact: parseInt(item.contact) || 0,
-      categories: item.categories.split(",").map((item) => item.trim()),
+      categories: item.categories.includes(",")
+        ? item.categories.split(",").map((item) => item.trim())
+        : item.categories.split("/").map((item) => item.trim()),
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       uploadedBy: { id: req.user.id, userType: req.user.userType },
