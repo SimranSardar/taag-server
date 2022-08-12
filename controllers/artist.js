@@ -154,6 +154,7 @@ export async function uploadArtistExcel(req, res) {
         "english",
       ],
       gender: item.gender || "NA",
+      email: item.email || "NA",
       location: item.location || "Mumbai",
       type: item.type || "type",
       instagram: item.instagram
