@@ -218,10 +218,11 @@ export async function uploadArtistExcel(req, res) {
       agencyName: item.agencyName || "NA",
       manager: item.manager || item.agencyName || "NA",
       contact: parseInt(item.contact) || 0,
-      categories:
-        (item?.categories?.includes(",")
+      categories: item.categories
+        ? item?.categories?.includes(",")
           ? item.categories.split(",").map((item) => item.trim())
-          : item.categories.split("/").map((item) => item.trim())) || [],
+          : item.categories.split("/").map((item) => item.trim())
+        : [],
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       uploadedBy: { id: req.user.id, userType: req.user.userType },
