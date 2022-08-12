@@ -219,7 +219,7 @@ export async function uploadArtistExcel(req, res) {
       manager: item.manager || item.agencyName || "NA",
       contact: parseInt(item.contact) || 0,
       categories:
-        (item?.categories.includes(",")
+        (item?.categories?.includes(",")
           ? item.categories.split(",").map((item) => item.trim())
           : item.categories.split("/").map((item) => item.trim())) || [],
       createdAt: new Date().toISOString(),
