@@ -81,7 +81,10 @@ export async function updateBrand(req, res) {
   }
 
   try {
-    const Brand = await BrandModel.findByIdAndUpdate(req.params.id, req.body);
+    const Brand = await BrandModel.findByIdAndUpdate(req.params.id, {
+      ...req.body,
+      updatedAt: new Date().toISOString(),
+    });
     return res.status(200).json({
       status: "success",
       data: Brand,

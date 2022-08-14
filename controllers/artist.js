@@ -88,7 +88,7 @@ export async function updateArtists(req, res) {
     try {
       const artist = await ArtistModel.findByIdAndUpdate(
         req.body[i]._id,
-        req.body[i],
+        { ...req.body[i], updatedAt: new Date().toISOString() },
         {
           new: true,
           upsert: true,
