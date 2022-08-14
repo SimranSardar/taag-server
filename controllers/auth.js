@@ -8,7 +8,7 @@ import BrandModel from "../models/Brand.model.js";
 import UserModel from "../models/User.model.js";
 
 export const userLogin = async function (req, res, next) {
-  const { email, password } = req.body;
+  const { email, password, userType } = req.body;
   console.log(req.body);
   if (!email || !password) {
     return res.status(401).json({
@@ -18,9 +18,16 @@ export const userLogin = async function (req, res, next) {
   }
 
   try {
-    const user = await mongoose.connection.db
-      .collection("users")
-      .findOne({ email });
+    let user = null;
+    if (userType === "brand") {
+      user = await mongoose.connection.db
+        .collection("brands")
+        .findOne({ "poc.email": email });
+    } else {
+      user = await mongoose.connection.db
+        .collection("users")
+        .findOne({ email });
+    }
 
     if (!user) {
       return res.status(404).json({
@@ -41,7 +48,7 @@ export const userLogin = async function (req, res, next) {
       {
         email,
         id: user._id,
-        userType: user.userType,
+        userType: user.userType || userType,
       },
       process.env.AUTH_KEY,
       { expiresIn: "7d" }
@@ -54,7 +61,7 @@ export const userLogin = async function (req, res, next) {
   } catch (error) {
     return res.status(500).json({
       status: "erorr",
-      message: "server error",
+      message: error.message,
     });
   }
 };
@@ -72,7 +79,7 @@ export const brandLogin = async function (req, res, next) {
   try {
     const user = await mongoose.connection.db
       .collection("brands")
-      .findOne({ email });
+      .findOne({ "poc.email": email });
 
     if (!user) {
       return res.status(404).json({
@@ -106,7 +113,7 @@ export const brandLogin = async function (req, res, next) {
   } catch (error) {
     return res.status(500).json({
       status: "erorr",
-      message: "server error",
+      message: error.message,
     });
   }
 };
@@ -115,7 +122,7 @@ async function sendResetLink(user, req, res) {
   if (!user) {
     return;
   }
-  const userType = { user };
+  const userType = user.userType;
   const domainURL = req.headers.referer;
   const resetLink = `${domainURL}reset-password/${uuid()}/${user._id}`;
 
@@ -128,12 +135,14 @@ async function sendResetLink(user, req, res) {
     html: `<h2>Password Reset</h2><br></br><p>Click on the link to reset your password: ${resetLink}</p>`,
   };
 
+  console.log(user, userType);
+
   try {
     await PasswordResetModel.create({
       _id: user._id,
       resetURI: hashedURI,
       email: userType === "brand" ? user.poc.email : user.email,
-      userType: user.userType || "brand",
+      userType: user.userType,
       createdAt: new Date().toISOString(),
       expiresAt: new Date(Date.now() + 3600000).toISOString(),
     });
@@ -197,7 +206,7 @@ export async function requestPasswordReset(req, res) {
       });
     }
 
-    sendResetLink(user, req, res);
+    sendResetLink({ ...user, userType }, req, res);
   } catch (error) {
     return res.status(500).json({
       status: "error",

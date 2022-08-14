@@ -12,6 +12,7 @@ const BrandSchema = mongoose.Schema(
       contact: { type: String, required: true }, // +91xxxxxxxxxx
       email: { type: String, required: true },
     },
+    password: { type: String, required: true },
     campaigns: { type: Array, required: false },
     createdAt: { type: String, required: true }, // ISOString
     updatedAt: { type: String, required: true }, // ISOString
