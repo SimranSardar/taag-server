@@ -16,24 +16,24 @@ const ig = {
 };
 const ArtistSchema = mongoose.Schema(
   {
-    _id: { type: String, required: true },
-    name: { type: String, required: true },
-    categories: { type: Array, required: true }, // Beauty | Fashion | Health | Lifestyle
-    languages: { type: Array, required: true }, // English | Hindi | Marathi | Telugu | Urdu
-    type: { type: String, required: true }, // macro | mini | mega
+    _id: { type: String, required: false, default: "NA" },
+    name: { type: String, required: false, default: "NA" },
+    categories: { type: Array, required: false }, // Beauty | Fashion | Health | Lifestyle
+    languages: { type: Array, required: false }, // English | Hindi | Marathi | Telugu | Urdu
+    type: { type: String, required: false, default: "NA" }, // macro | mini | mega
     youtube: { type: yt, default: undefined },
     instagram: { type: ig, default: undefined },
-    gender: { type: String, required: true },
-    location: { type: String, required: true },
-    agencyName: { type: String, required: true },
-    manager: { type: String, required: true },
-    contact: { type: Number, required: true },
-    email: { type: String, required: true },
-    createdAt: { type: String, required: true }, // ISOString
-    updatedAt: { type: String, required: true }, // ISOString
+    gender: { type: String, required: false, default: "NA" },
+    location: { type: String, required: false, default: "NA" },
+    agencyName: { type: String, required: false, default: "NA" },
+    manager: { type: String, required: false, default: "NA" },
+    contact: { type: Number, required: false },
+    email: { type: String, required: false, default: "NA" },
+    createdAt: { type: String, required: false }, // ISOString
+    updatedAt: { type: String, required: false }, // ISOString
     uploadedBy: {
-      id: { type: String, required: true },
-      userType: { type: String, required: true }, // team | brand | admin
+      id: { type: String, required: false },
+      userType: { type: String, required: false }, // team | brand | admin
     }, // agencyId
   },
   {

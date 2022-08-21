@@ -4,10 +4,10 @@ const CampaignSchema = mongoose.Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
-    isSharedWithBrand: { type: Boolean, required: true },
+    isSharedWithBrand: { type: Boolean, required: false },
     brand: {
       name: { type: String, required: true },
-      sector: { type: String, required: true }, // Beauty | Fashion | Health
+      sectors: { type: Array, required: true }, // Beauty | Fashion | Health
       website: { type: String, required: true }, // URL
       poc: {
         id: { type: String, required: true },
@@ -18,7 +18,7 @@ const CampaignSchema = mongoose.Schema(
       },
     },
     platform: { type: String, required: true }, // youtube | instagram
-    sector: { type: String, required: true }, // Beauty | Fashion | Health | Lifestyle
+    sectors: { type: Array, required: true }, // Beauty | Fashion | Health | Lifestyle
     deliverable: { type: String, required: true }, // video | image
     brief: { type: String, required: true },
     // validity: {

@@ -72,7 +72,7 @@ async function getArtist(campaign) {
   );
 }
 
-export async function getCampaignWithQuery(req, res) {
+export async function getCampaignsWithQuery(req, res) {
   console.log(req.query);
   if (!req.query.id) {
     return res.status(400).json({
@@ -81,10 +81,67 @@ export async function getCampaignWithQuery(req, res) {
     });
   }
 
-  let query = { ...req.query };
+  let query = { ...req.query.query };
 
   try {
     const campaigns = await CampaignModel.find({ ...query });
+    let artistGetPromises = campaigns.map((campaign) =>
+      campaign.selectedArtists ? getArtist(campaign) : null
+    );
+    let artistsResults = await Promise.all(artistGetPromises);
+    let newCampaigns = campaigns.map((campaign) => campaign.toObject());
+    artistsResults.forEach((artists, i) => {
+      if (artists) {
+        newCampaigns[i].selectedArtists = newCampaigns[i].selectedArtists.map(
+          (artist) => ({
+            ...artist,
+            ...artists
+              .map((artist) => artist.toObject())
+              .find((item) => item._id === artist._id),
+          })
+        );
+      }
+    });
+    // campaigns.forEach((campaign) => {
+    //   if (campaign.selectedArtists.length) {
+    //     const artists = await ArtistModel.find(
+    //       { _id: { $in: campaign.selectedArtists.map((item) => item._id) } },
+    //       { createdAt: 0, updatedAt: 0 }
+    //     );
+    //     let artistsObj = artists.map((artist) => artist.toObject());
+    //     campaign.selectedArtists = campaign.selectedArtists.map((artist) => ({
+    //       ...artist,
+    //       ...artistsObj.find((item) => item._id === artist._id),
+    //     }));
+    //     console.log(campaign.selectedArtists);
+    //   }
+    // })
+    return res.status(200).json(campaigns);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+export async function getCampaignsByBrand(req, res) {
+  console.log(req.query);
+  if (!req.query.brand) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid Brand",
+    });
+  }
+
+  let { brand } = req.query;
+
+  try {
+    const campaigns = await CampaignModel.find({
+      "brand.name": { $regex: brand, $options: "i" },
+      isSharedWithBrand: true,
+    });
     let artistGetPromises = campaigns.map((campaign) =>
       campaign.selectedArtists ? getArtist(campaign) : null
     );
@@ -157,7 +214,7 @@ export async function updateCampaign(req, res) {
     console.log(req.body);
     const campaignUpdate = await CampaignModel.findByIdAndUpdate(
       req.body._id,
-      req.body,
+      { ...req.body, updatedAt: new Date().toISOString() },
       { new: true }
     );
     return res.status(200).json({

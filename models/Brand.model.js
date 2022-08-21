@@ -4,7 +4,7 @@ const BrandSchema = mongoose.Schema(
   {
     _id: { type: String, required: true },
     name: { type: String, required: true },
-    sector: { type: String, required: true }, // Beauty | Fashion | Health
+    sectors: { type: Array, required: true }, // Beauty | Fashion | Health
     website: { type: String, required: true }, // URL
     poc: {
       name: { type: String, required: true },
@@ -12,6 +12,7 @@ const BrandSchema = mongoose.Schema(
       contact: { type: String, required: true }, // +91xxxxxxxxxx
       email: { type: String, required: true },
     },
+    password: { type: String, required: true },
     campaigns: { type: Array, required: false },
     createdAt: { type: String, required: true }, // ISOString
     updatedAt: { type: String, required: true }, // ISOString

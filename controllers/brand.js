@@ -1,8 +1,20 @@
 import BrandModel from "../models/Brand.model.js";
+import bcrypt from "bcrypt";
 import { v4 as uuid } from "uuid";
 
 export async function createBrand(req, res) {
+  const { name, email, password } = req.body;
+
   try {
+    const newUser = await BrandModel.findOne({ name, email });
+
+    if (newUser) {
+      return res.status(400).json({ message: "Brand already exists" });
+    }
+
+    console.log(req.body);
+
+    const hashedPassword = await bcrypt.hash(password, 12);
     console.log(req.body);
     const Brand = await BrandModel.create({
       ...req.body,
@@ -10,6 +22,7 @@ export async function createBrand(req, res) {
         /-/g,
         "_"
       )}`,
+      password: hashedPassword,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
@@ -68,7 +81,10 @@ export async function updateBrand(req, res) {
   }
 
   try {
-    const Brand = await BrandModel.findByIdAndUpdate(req.params.id, req.body);
+    const Brand = await BrandModel.findByIdAndUpdate(req.params.id, {
+      ...req.body,
+      updatedAt: new Date().toISOString(),
+    });
     return res.status(200).json({
       status: "success",
       data: Brand,

@@ -3,10 +3,11 @@ import {
   createCampaign,
   getCampaign,
   getCampaigns,
-  getCampaignWithQuery,
+  getCampaignsWithQuery,
   updateCampaign,
   uploadInvoice,
   downloadInvoice,
+  getCampaignsByBrand,
 } from "../controllers/campaign.js";
 import multer from "multer";
 
@@ -24,7 +25,8 @@ const router = express.Router();
 
 router.get("/all", getCampaigns);
 router.get("/single/", getCampaign);
-// router.get("/single/query", getCampaignWithQuery);
+router.get("/bulk/query", getCampaignsWithQuery);
+router.get("/brand/", getCampaignsByBrand);
 router.post("/create", createCampaign);
 router.patch("/update/", updateCampaign);
 router.post("/upload", upload.single("file"), uploadInvoice);
