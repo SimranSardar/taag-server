@@ -35,7 +35,7 @@ const CampaignSchema = mongoose.Schema(
     sharedWith: { type: Array, required: false },
     extras: { type: Array, required: false },
     createdAt: { type: String, required: true }, // ISOString
-    updatedAt: { type: String, required: true }, // ISOString
+    updatedgitAt: { type: String, required: true }, // ISOString
   },
   {
     collection: "campaigns",
