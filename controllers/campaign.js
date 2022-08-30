@@ -41,7 +41,7 @@ export async function getCampaign(req, res) {
 
   try {
     const campaign = await CampaignModel.findById(req.query.id);
-    if (campaign.selectedArtists.length) {
+    if (campaign?.selectedArtists.length) {
       const artists = await ArtistModel.find(
         { _id: { $in: campaign.selectedArtists.map((item) => item._id) } },
         { createdAt: 0, updatedAt: 0 }
