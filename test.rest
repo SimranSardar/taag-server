@@ -8,3 +8,12 @@ Content-Type: application/json
 {
     "videoId": "dkdXCbwWKHY"
 }
+
+###
+
+GET http://localhost:5000/youtube/subscribers
+Content-Type: application/json
+
+{
+    "channelId": "DocUnlock"
+}

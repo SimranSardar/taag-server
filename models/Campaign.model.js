@@ -34,6 +34,10 @@ const CampaignSchema = mongoose.Schema(
     status: { type: String, required: true }, // draft | locked | finished
     sharedWith: { type: Array, required: false },
     extras: { type: Array, required: false },
+    createdBy: {
+      id: { type: String, required: true },
+      userTpye: { type: String, required: true }, // admin | agency | team
+    },
     createdAt: { type: String, required: true }, // ISOString
     updatedgitAt: { type: String, required: true }, // ISOString
   },

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 export async function getStats(req, res) {
-  const { videoId } = req.query;
+  const { videoId } = req.params;
   if (!videoId) {
     return res.status(400).json({
       status: "error",
@@ -27,6 +27,39 @@ export async function getStats(req, res) {
       views,
       likes,
       comments,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+export async function getSubscribers(req, res) {
+  const { channelId } = req.query;
+  console.log(req.query);
+  if (!channelId) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid Channel ID",
+    });
+  }
+  try {
+    // console.log("inside");
+    const data = await axios.get(
+      "https://www.googleapis.com/youtube/v3/channels",
+      {
+        params: {
+          part: "statistics",
+          id: channelId,
+          key: process.env.YOUTUBE_API_KEY,
+        },
+      }
+    );
+    let subscribers = data.data.items[0].statistics.subscriberCount;
+    return res.status(200).json({
+      subscribers,
     });
   } catch (error) {
     return res.status(500).json({

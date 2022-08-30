@@ -1,8 +1,9 @@
 import express from "express";
-import { getStats } from "../controllers/youtube.js";
+import { getStats, getSubscribers } from "../controllers/youtube.js";
 
 const router = express.Router();
 
 router.get("/getLikes", getStats);
+router.get("/subscribers", getSubscribers);
 
 export default router;
