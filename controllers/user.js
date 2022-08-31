@@ -15,7 +15,7 @@ export const createUser = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 12);
 
     let finalData = req.body;
-    finalData.userType = "admin";
+    // finalData.userType = "admin";
     finalData.createdAt = new Date().toISOString();
     finalData.updatedAt = new Date().toISOString();
 
