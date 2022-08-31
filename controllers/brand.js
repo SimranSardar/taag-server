@@ -98,7 +98,7 @@ export async function updateBrand(req, res) {
 }
 
 export async function insertCampaignIntoBrand(req, res) {
-  if (!req.query.id || !req.query.campaignId) {
+  if (!req.body.id || !req.body.campaignId) {
     return res.status(400).json({
       status: "error",
       message: "Invalid ID",
@@ -106,7 +106,7 @@ export async function insertCampaignIntoBrand(req, res) {
   }
 
   try {
-    const Brand = await BrandModel.findByIdAndUpdate(req.query.id, {
+    const Brand = await BrandModel.findByIdAndUpdate(req.body.id, {
       $set: { $push: { campaigns: req.body.campaignId } },
       updatedAt: new Date().toISOString(),
     });
