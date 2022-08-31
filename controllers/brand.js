@@ -97,6 +97,31 @@ export async function updateBrand(req, res) {
   }
 }
 
+export async function insertCampaignIntoBrand(req, res) {
+  if (!req.query.id || !req.query.campaignId) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid ID",
+    });
+  }
+
+  try {
+    const Brand = await BrandModel.findByIdAndUpdate(req.query.id, {
+      $set: { $push: { campaigns: req.body.campaignId } },
+      updatedAt: new Date().toISOString(),
+    });
+    return res.status(200).json({
+      status: "success",
+      data: Brand,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
 export async function deleteBrand(req, res) {
   if (!req.query.id) {
     return res.status(400).json({
