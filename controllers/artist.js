@@ -1,6 +1,7 @@
 import ArtistModel from "../models/Artist.model.js";
 import xlsx from "xlsx";
 import { v4 as uuid } from "uuid";
+import { elaborateKMB, replaceCommaAndSpaceWithEmptyString } from "../utils.js";
 
 export async function createArtist(req, res) {
   try {
@@ -161,32 +162,27 @@ export async function uploadArtistExcel(req, res) {
         ? {
             link: item.instagram,
             followers: item.followers
-              ? parseInt(
-                  item.followers?.toString().replace(",", "").replace(" ", "")
-                ) || 1
+              ? parseInt(elaborateKMB(item.followers?.toString())) || 1
               : 0 || 1,
             reelCommercial: item.reelCommercial
               ? parseInt(
-                  item.reelCommercial
-                    ?.toString()
-                    .replace(",", "")
-                    .replace(" ", "")
+                  replaceCommaAndSpaceWithEmptyString(
+                    item.reelCommercial?.toString()
+                  )
                 ) || 1
               : 0 || 1,
             storyCommercial: item.storyCommercial
               ? parseInt(
-                  item.storyCommercial
-                    ?.toString()
-                    .replace(",", "")
-                    .replace(" ", "")
+                  replaceCommaAndSpaceWithEmptyString(
+                    item.storyCommercial?.toString()
+                  )
                 ) || 1
               : 0 || 1,
             averageViews: item.averageInstagramViews
               ? parseInt(
-                  item.averageInstagramViews
-                    ?.toString()
-                    .replace(",", "")
-                    .replace(" ", "")
+                  replaceCommaAndSpaceWithEmptyString(
+                    item.averageInstagramViews?.toString()
+                  )
                 ) || 1
               : 0 || 1,
           }
@@ -195,24 +191,20 @@ export async function uploadArtistExcel(req, res) {
         ? {
             link: item.youtube,
             subscribers: item.subscribers
-              ? parseInt(
-                  item.subscribers?.toString().replace(",", "").replace(" ", "")
-                ) || 1
+              ? parseInt(elaborateKMB(item.subscribers?.toString())) || 1
               : 0 ?? 1,
             commercial: item.youtubeCommercial
               ? parseInt(
-                  item.youtubeCommercial
-                    ?.toString()
-                    .replace(",", "")
-                    .replace(" ", "")
+                  replaceCommaAndSpaceWithEmptyString(
+                    item.youtubeCommercial?.toString()
+                  )
                 ) || 1
               : 0 ?? 1,
             averageViews: item.averageYoutubeViews
               ? parseInt(
-                  item.averageYoutubeViews
-                    ?.toString()
-                    .replace(",", "")
-                    .replace(" ", "")
+                  replaceCommaAndSpaceWithEmptyString(
+                    item.averageYoutubeViews?.toString()
+                  )
                 ) || 1
               : 0 ?? 1,
           }

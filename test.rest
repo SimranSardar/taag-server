@@ -15,5 +15,5 @@ GET http://localhost:5000/youtube/subscribers
 Content-Type: application/json
 
 {
-    "channelId": "DocUnlock"
+    "youtubeURI": "https://www.youtube.com/c/Fireship"
 }
