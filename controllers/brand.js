@@ -98,18 +98,28 @@ export async function updateBrand(req, res) {
 }
 
 export async function insertCampaignIntoBrand(req, res) {
-  if (!req.body.id || !req.body.campaignId) {
+  if (!req.body.email) {
     return res.status(400).json({
       status: "error",
-      message: "Invalid ID",
+      message: "Invalid Email",
+    });
+  }
+
+  if (!req.body.campaignId) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid Campaign Id",
     });
   }
 
   try {
-    const Brand = await BrandModel.findByIdAndUpdate(req.body.id, {
-      $set: { $push: { campaigns: req.body.campaignId } },
-      updatedAt: new Date().toISOString(),
-    });
+    const Brand = await BrandModel.findOneAndUpdate(
+      { email: req.body.email },
+      {
+        $set: { $push: { campaigns: req.body.campaignId } },
+        updatedAt: new Date().toISOString(),
+      }
+    );
     return res.status(200).json({
       status: "success",
       data: Brand,
