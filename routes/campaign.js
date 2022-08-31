@@ -8,6 +8,7 @@ import {
   uploadInvoice,
   downloadInvoice,
   getCampaignsByBrand,
+  getUserCampaigns,
 } from "../controllers/campaign.js";
 import multer from "multer";
 
@@ -24,6 +25,7 @@ const upload = multer({ storage: fileStorageEngine });
 const router = express.Router();
 
 router.get("/all", getCampaigns);
+router.get("/all-by-user", getUserCampaigns);
 router.get("/single/", getCampaign);
 router.get("/bulk/query", getCampaignsWithQuery);
 router.get("/brand/", getCampaignsByBrand);

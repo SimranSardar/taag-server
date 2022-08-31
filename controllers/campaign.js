@@ -202,6 +202,30 @@ export async function getCampaigns(req, res) {
   }
 }
 
+export async function getUserCampaigns(req, res) {
+  try {
+    const status = req.query.status;
+    let query = { ...req.query };
+    console.log({ query });
+    if (status !== "all") {
+      const campaigns = await CampaignModel.find({
+        status,
+        "createdBy.id": req.query.userId,
+      }).limit(10);
+      return res.status(200).json(campaigns).limit(10);
+    }
+    const campaigns = await CampaignModel.find({
+      "createdBy.id": req.query.userId,
+    }).limit(10);
+    return res.status(200).json(campaigns);
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
 export async function updateCampaign(req, res) {
   if (!req.body._id) {
     return res.status(400).json({
