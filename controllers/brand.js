@@ -114,7 +114,7 @@ export async function insertCampaignIntoBrand(req, res) {
 
   try {
     const Brand = await BrandModel.findOneAndUpdate(
-      { email: req.body.email },
+      { "poc.email": req.body.email },
       {
         $set: { $push: { campaigns: req.body.campaignId } },
         updatedAt: new Date().toISOString(),
