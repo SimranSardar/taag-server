@@ -37,7 +37,7 @@ export async function getStats(req, res) {
 }
 
 export async function getSubscribers(req, res) {
-  const { channelId } = req.query;
+  const { channelId } = req.params;
   console.log(req.query);
   if (!channelId) {
     return res.status(400).json({
