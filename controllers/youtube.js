@@ -53,20 +53,46 @@ export async function getSubscribers(req, res) {
   }
   try {
     // console.log("inside");
-    const data = await axios.get(
-      "https://www.googleapis.com/youtube/v3/channels",
-      {
-        params: {
-          part:
-            channelId[3] == "channel"
-              ? "statistics"
-              : "snippet,statistics,contentDetails",
-          forUsername: channelId[4],
-          // id: channelId[4],
-          key: process.env.YOUTUBE_API_KEY,
-        },
+    let params = {
+      part: "snippet,contentDetails,statistics",
+      key: process.env.YOUTUBE_API_KEY,
+    };
+    if (channelId[3] === "channel") {
+      params.id = channelId[4];
+    } else if (channelId[3] === "user") {
+      params.forUsername = channelId[4];
+    }
+    let data = null;
+    if (channelId[3] !== "c") {
+      data = await axios.get("https://www.googleapis.com/youtube/v3/channels", {
+        params,
+      });
+    } else {
+      const channelList = await axios.get(
+        "https://www.googleapis.com/youtube/v3/search",
+        {
+          params: {
+            part: "snippet",
+            key: process.env.YOUTUBE_API_KEY,
+            q: channelId[4],
+            maxResults: 10,
+            order: "relevance",
+            type: "channel",
+          },
+        }
+      );
+      console.log(channelList);
+      if (channelList.data.items.length === 0) {
+        return res.status(400).json({
+          status: "error",
+          message: "Invalid Channel ID",
+        });
       }
-    );
+      params.id = channelList.data.items[0].id.channelId;
+      data = await axios.get("https://www.googleapis.com/youtube/v3/channels", {
+        params,
+      });
+    }
     console.log(data.data);
     let subscribers = data.data.items[0].statistics.subscriberCount;
     return res.status(200).json({
