@@ -36,10 +36,10 @@ const CampaignSchema = mongoose.Schema(
     extras: { type: Array, required: false },
     createdBy: {
       id: { type: String, required: true },
-      userTpye: { type: String, required: true }, // admin | agency | team
+      userType: { type: String, required: true }, // admin | agency | team
     },
     createdAt: { type: String, required: true }, // ISOString
-    updatedtAt: { type: String, required: true }, // ISOString
+    updatedAt: { type: String, required: true }, // ISOString
   },
   {
     collection: "campaigns",
