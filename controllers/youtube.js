@@ -2,7 +2,7 @@ import axios from "axios";
 import { extractChannelIDFromYoutubeURL } from "../utils.js";
 
 export async function getStats(req, res) {
-  const { videoId } = req.params;
+  const { videoId } = req.query;
   if (!videoId) {
     return res.status(400).json({
       status: "error",
