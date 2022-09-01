@@ -126,7 +126,6 @@ async function sendResetLink(user, req, res) {
   const domainURL = req.headers.referer;
   const resetToken = jwt.sign(
     {
-      id: uuid(),
       userId: user._id,
       email: user.email,
     },
@@ -236,7 +235,7 @@ export async function verifyResetToken(req, res) {
   }
 
   const user = await PasswordResetModel.findOne({ _id: userId });
-  console.log(id, uri, user);
+  console.log(userId, uri, user);
 
   if (!user) {
     return res.status(404).json({
