@@ -140,7 +140,8 @@ async function sendResetLink(user, req, res) {
     from: process.env.AUTH_EMAIL,
     to: userType === "brand" ? user.poc.email : user.email,
     subject: "Password Reset",
-    html: `<h2>Password Reset</h2><br></br><p>Click on the link to reset your password: ${resetLink}</p>`,
+    html: `<h2>Password Reset</h2><br></br><p>Click on the link to reset your password:
+    <a style="padding: 1.5rem 3rem; border-radius: 5px; background: green; color: white; outline: none;" href="${resetLink}" target="_blank">Reset Password</a></p>`,
   };
 
   console.log(user, userType);
