@@ -124,7 +124,16 @@ async function sendResetLink(user, req, res) {
   }
   const userType = user.userType;
   const domainURL = req.headers.referer;
-  const resetLink = `${domainURL}reset-password/${uuid()}/${user._id}`;
+  const resetToken = jwt.sign(
+    {
+      id: uuid(),
+      userId: user._id,
+      email: user.email,
+    },
+    process.env.AUTH_KEY,
+    { expiresIn: "1h" }
+  );
+  const resetLink = `${domainURL}reset-password/${resetToken}`;
 
   // Hash reset URI
   const hashedURI = await bcrypt.hash(resetLink, 10);
@@ -216,14 +225,25 @@ export async function requestPasswordReset(req, res) {
 }
 
 export async function verifyResetToken(req, res) {
-  const { id, uri } = req.query;
-  const user = await PasswordResetModel.findOne({ _id: id });
+  const { token, uri } = req.query;
+  const { userId } = jwt.verify(token, process.env.AUTH_KEY);
+
+  if (!userId) {
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid token",
+    });
+  }
+
+  const user = await PasswordResetModel.findOne({ _id: userId });
   console.log(id, uri, user);
+
   if (!user) {
     return res.status(404).json({
       message: "User not found",
     });
   }
+
   const isTokenValid =
     (await bcrypt.compare(uri, user.resetURI)) &&
     new Date(user.expiresAt) > new Date();
