@@ -29,6 +29,7 @@ const CampaignSchema = mongoose.Schema(
     brandAmount: { type: Number, required: true },
     currency: { type: String, required: true }, // INR | USD
     agencyFee: { type: Number, required: true },
+    averageROI: { type: Number, required: false, default: 0.0 },
     totalCreators: { type: Number, required: true },
     totalAverageViews: { type: Number, required: true },
     status: { type: String, required: true }, // draft | locked | finished
