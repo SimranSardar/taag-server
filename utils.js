@@ -3,14 +3,16 @@ export function replaceCommaAndSpaceWithEmptyString(str) {
 }
 
 export function elaborateKMB(str) {
-  const temp = replaceCommaAndSpaceWithEmptyString(str.replace(/./g, ""));
+  const temp = replaceCommaAndSpaceWithEmptyString(
+    str.replace(/./g, "")
+  ).toLowerCase();
 
-  if (temp.includes("K")) {
-    return parseInt(temp.replace("K", "")) * 1000;
-  } else if (temp.includes("M")) {
-    return parseInt(temp.replace("M", "")) * 1000000;
-  } else if (temp.includes("B")) {
-    return parseInt(temp.replace("B", "")) * 1000000000;
+  if (temp.includes("k")) {
+    return parseInt(temp.replace("k", "")) * 1000;
+  } else if (temp.includes("m")) {
+    return parseInt(temp.replace("m", "")) * 1000000;
+  } else if (temp.includes("b")) {
+    return parseInt(temp.replace("b", "")) * 1000000000;
   } else {
     return parseInt(temp) || str;
   }
