@@ -54,7 +54,7 @@ export async function getArtists(req, res) {
     if (req.query) {
       params = { ...req.query };
     }
-    if (req.user?.userType !== "admin") {
+    if (req.user?.userType !== "admin" && req.user?.userType !== "team") {
       params = { ...params, "uploadedBy.id": req.user.id };
     }
     console.log("PARAMS", params);
