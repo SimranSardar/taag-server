@@ -25,12 +25,12 @@ const upload = multer({ storage: fileStorageEngine });
 const router = express.Router();
 
 router.get("/all", auth, getArtists);
-router.get("/:id", getArtist);
+router.get("/:id", auth, getArtist);
 router.get("/agency", getAgencyArtists);
-router.post("/create", createArtist);
+router.post("/create", auth, createArtist);
 router.post("/bulk", auth, upload.single("file"), uploadArtistExcel);
-router.patch("/update", updateArtist);
-router.patch("/update/bulk", updateArtists);
-router.delete("/:id", deleteArtist);
+router.patch("/update", auth, updateArtist);
+router.patch("/update/bulk", auth, updateArtists);
+router.delete("/:id", auth, deleteArtist);
 
 export default router;

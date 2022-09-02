@@ -7,14 +7,15 @@ import {
   deleteBrand,
   insertCampaignIntoBrand,
 } from "../controllers/brand.js";
+import auth from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.get("/all", getBrands);
-router.get("/:id", getBrand);
-router.post("/create", createBrand);
-router.patch("/update", updateBrand);
-router.post("/push-campaign", insertCampaignIntoBrand);
-router.delete("/:id", deleteBrand);
+router.get("/all", auth, getBrands);
+router.get("/:id", auth, getBrand);
+router.post("/create", auth, createBrand);
+router.patch("/update", auth, updateBrand);
+router.post("/push-campaign", auth, insertCampaignIntoBrand);
+router.delete("/:id", auth, deleteBrand);
 
 export default router;

@@ -11,6 +11,7 @@ import {
   getUserCampaigns,
 } from "../controllers/campaign.js";
 import multer from "multer";
+import auth from "../middlewares/auth.js";
 
 const fileStorageEngine = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -24,14 +25,14 @@ const upload = multer({ storage: fileStorageEngine });
 
 const router = express.Router();
 
-router.get("/all", getCampaigns);
-router.get("/all-by-user", getUserCampaigns);
-router.get("/single/", getCampaign);
-router.get("/bulk/query", getCampaignsWithQuery);
-router.get("/brand/", getCampaignsByBrand);
-router.post("/create", createCampaign);
-router.patch("/update/", updateCampaign);
-router.post("/upload", upload.single("file"), uploadInvoice);
-router.get("/download-invoice", downloadInvoice);
+router.get("/all", auth, getCampaigns);
+router.get("/all-by-user", auth, getUserCampaigns);
+router.get("/single/", auth, getCampaign);
+router.get("/bulk/query", auth, getCampaignsWithQuery);
+router.get("/brand/", auth, getCampaignsByBrand);
+router.post("/create", auth, createCampaign);
+router.patch("/update/", auth, updateCampaign);
+router.post("/upload", upload.single("file"), auth, uploadInvoice);
+router.get("/download-invoice", auth, downloadInvoice);
 
 export default router;
