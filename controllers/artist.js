@@ -155,13 +155,13 @@ export async function deleteArtist(req, res) {
 
 export async function uploadArtistExcel(req, res) {
   try {
-    console.log(req.file, req.user);
+    // console.log(req.file, req.user);
     const workBook = xlsx.readFile(req.file.path);
 
     const workSheet = workBook.Sheets[Object.keys(workBook.Sheets)[0]];
 
     const data = xlsx.utils.sheet_to_json(workSheet);
-    console.log(data);
+    // console.log(data);
 
     let finalData = data.map((item) => ({
       ...item,

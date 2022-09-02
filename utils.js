@@ -3,19 +3,22 @@ export function replaceCommaAndSpaceWithEmptyString(str) {
 }
 
 export function elaborateKMB(str) {
-  const temp = replaceCommaAndSpaceWithEmptyString(
-    str.replace(/./g, "")
-  ).toLowerCase();
+  const temp = replaceCommaAndSpaceWithEmptyString(str).toLowerCase();
+
+  let value = "";
 
   if (temp.includes("k")) {
-    return parseInt(temp.replace("k", "")) * 1000;
+    value = parseInt(temp.replace(/k/g, "")) * 1000;
   } else if (temp.includes("m")) {
-    return parseInt(temp.replace("m", "")) * 1000000;
+    value = parseInt(temp.replace(/m/g, "")) * 1000000;
   } else if (temp.includes("b")) {
-    return parseInt(temp.replace("b", "")) * 1000000000;
+    value = parseInt(temp.replace(/b/g, "")) * 1000000000;
   } else {
-    return parseInt(temp) || str;
+    value = parseInt(temp) || str;
   }
+  console.log(value);
+
+  return value;
 }
 
 export function extractChannelIDFromYoutubeURL(url) {
