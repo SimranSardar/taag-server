@@ -26,7 +26,7 @@ export const userLogin = async function (req, res, next) {
     } else {
       user = await mongoose.connection.db
         .collection("users")
-        .findOne({ email });
+        .findOne({ email, userType });
     }
 
     if (!user) {

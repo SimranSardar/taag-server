@@ -7,6 +7,7 @@ import {
   deleteArtist,
   uploadArtistExcel,
   updateArtists,
+  getAgencyArtists,
 } from "../controllers/artist.js";
 import multer from "multer";
 import auth from "../middlewares/auth.js";
@@ -23,8 +24,9 @@ const upload = multer({ storage: fileStorageEngine });
 
 const router = express.Router();
 
-router.get("/all", getArtists);
+router.get("/all", auth, getArtists);
 router.get("/:id", getArtist);
+router.get("/agency", getAgencyArtists);
 router.post("/create", createArtist);
 router.post("/bulk", auth, upload.single("file"), uploadArtistExcel);
 router.patch("/update", updateArtist);

@@ -49,7 +49,28 @@ export async function getArtist(req, res) {
 
 export async function getArtists(req, res) {
   try {
-    const artists = await ArtistModel.find();
+    let params = {};
+    console.log(req.user);
+    if (req.query) {
+      params = { ...req.query };
+    }
+    if (req.user?.userType !== "admin") {
+      params = { ...params, "uploadedBy.id": req.user.id };
+    }
+    console.log("PARAMS", params);
+    const artists = await ArtistModel.find({ ...params });
+    return res.status(200).json(artists);
+  } catch (error) {
+    return res.status(500).json({
+      status: "error",
+      message: error.message,
+    });
+  }
+}
+
+export async function getAgencyArtists(req, res) {
+  try {
+    const artists = await ArtistModel.find({ "uploadedBy.id": req.query.id });
     return res.status(200).json(artists);
   } catch (error) {
     return res.status(500).json({
