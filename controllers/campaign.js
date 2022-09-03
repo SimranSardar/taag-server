@@ -7,6 +7,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export async function createCampaign(req, res) {
+  const user = req.user;
+  if (!user) {
+    res.status(401).json({ status: "error", message: "Unauthorized" });
+    return;
+  }
   try {
     // console.log(req, res);
     const campaign = await CampaignModel.create({
@@ -15,6 +20,10 @@ export async function createCampaign(req, res) {
         /-/g,
         "_"
       )}`,
+      createdBy: {
+        id: user.id,
+        userType: user.userType, // admin | agency | team
+      },
     });
     console.log(campaign);
     return res.status(201).json({
