@@ -6,10 +6,10 @@ export async function createBrand(req, res) {
   const { name, email, password } = req.body;
 
   try {
-    const newUser = await BrandModel.findOne({ name, email });
+    const newUser = await BrandModel.findOne({ "poc.email": email });
 
     if (newUser) {
-      return res.status(400).json({ message: "Brand already exists" });
+      return res.status(400).json({ message: "Email already exists" });
     }
 
     console.log(req.body);
