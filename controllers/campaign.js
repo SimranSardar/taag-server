@@ -48,8 +48,25 @@ export async function getCampaign(req, res) {
     });
   }
 
+  if (!req.user) {
+    return res.status(401).json({
+      status: "error",
+      message: "Unauthorized",
+    });
+  }
+
   try {
     const campaign = await CampaignModel.findById(req.query.id);
+
+    if (req.user?.userType !== "admin" || req.user?.userType !== "team") {
+      if (campaign.createdBy.id !== req.user.id) {
+        return res.status(401).json({
+          status: "error",
+          message: "Unauthorized",
+        });
+      }
+    }
+
     if (campaign?.selectedArtists.length) {
       const artists = await ArtistModel.find(
         { _id: { $in: campaign.selectedArtists.map((item) => item._id) } },
