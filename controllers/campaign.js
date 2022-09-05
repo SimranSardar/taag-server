@@ -73,6 +73,14 @@ export async function getCampaign(req, res) {
         });
       }
     }
+    if (req.user?.userType === "team") {
+      if (campaign.createdBy.id !== req.user.id) {
+        return res.status(401).json({
+          status: "error",
+          message: "Unauthorized",
+        });
+      }
+    }
 
     if (req.user?.userType === "brand") {
       const brand = await BrandModel.findById(req.user.id);
