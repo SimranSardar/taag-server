@@ -58,6 +58,12 @@ export async function getCampaign(req, res) {
   try {
     const campaign = await CampaignModel.findById(req.query.id);
 
+    if (!campaign) {
+      return res.status(404).json({
+        status: "error",
+        message: "Campaign not found",
+      });
+    }
     if (req.user?.userType !== "admin" || req.user?.userType !== "team") {
       if (campaign.createdBy.id !== req.user.id) {
         return res.status(401).json({
