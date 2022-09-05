@@ -25,6 +25,7 @@ export async function getStats(req, res) {
     let likes = data.data.items[0].statistics.likeCount;
     let comments = data.data.items[0].statistics.commentCount;
     return res.status(200).json({
+      videoId,
       views,
       likes,
       comments,
