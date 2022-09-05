@@ -1,5 +1,6 @@
 import CampaignModel from "../models/Campaign.model.js";
 import ArtistModel from "../models/Artist.model.js";
+import BrandModel from "../models/Brand.model.js";
 import { v4 as uuid } from "uuid";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -58,8 +59,18 @@ export async function getCampaign(req, res) {
   try {
     const campaign = await CampaignModel.findById(req.query.id);
 
-    if (req.user?.userType !== "admin" || req.user?.userType !== "team") {
+    if (req.user?.userType === "agency") {
       if (campaign.createdBy.id !== req.user.id) {
+        return res.status(401).json({
+          status: "error",
+          message: "Unauthorized",
+        });
+      }
+    }
+    
+    if (req.user?.userType === 'brand') {
+      const brand = await BrandModel.findById(req.user.id);
+      if(campaign?.brand?.name.toLowerCase() !== brand.name?.toLowerCase()){
         return res.status(401).json({
           status: "error",
           message: "Unauthorized",
