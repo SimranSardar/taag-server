@@ -190,7 +190,7 @@ export async function getCampaignsByBrand(req, res) {
 
   try {
     const campaigns = await CampaignModel.find({
-      "brand.email": { $regex: brand, $options: "i" },
+      "brand.email": brand,
       isSharedWithBrand: true,
     });
     let artistGetPromises = campaigns.map((campaign) =>
